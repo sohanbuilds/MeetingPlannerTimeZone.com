@@ -26,6 +26,7 @@ interface RangeSliderProps {
  */
 export function RangeSlider({ bounds, onChange, min = 0, max = 24 * 60, step = 30 }: RangeSliderProps) {
 	const trackRef = useRef<HTMLDivElement>(null);
+	const activeThumbRef = useRef<'start' | 'end' | null>(null);
 	const minGap = 60;
 
 	function valueFromClientX(clientX: number): number {
@@ -44,6 +45,31 @@ export function RangeSlider({ bounds, onChange, min = 0, max = 24 * 60, step = 3
 		} else {
 			onChange({ ...bounds, endMinute: Math.max(value, bounds.startMinute + minGap) });
 		}
+	}
+
+	function nearestThumb(clientX: number): 'start' | 'end' {
+		const value = valueFromClientX(clientX);
+		const distToStart = Math.abs(value - bounds.startMinute);
+		const distToEnd = Math.abs(value - bounds.endMinute);
+		return distToStart <= distToEnd ? 'start' : 'end';
+	}
+
+	function handleTrackPointerDown(e: PointerEvent) {
+		const target = e.target as HTMLElement;
+		const explicit = target.closest('[data-thumb]') as HTMLElement | null;
+		const which = (explicit?.dataset.thumb as 'start' | 'end' | undefined) ?? nearestThumb(e.clientX);
+		activeThumbRef.current = which;
+		(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+		handleDrag(which, e.clientX);
+	}
+
+	function handleTrackPointerMove(e: PointerEvent) {
+		if (e.buttons !== 1 || !activeThumbRef.current) return;
+		handleDrag(activeThumbRef.current, e.clientX);
+	}
+
+	function handleTrackPointerUp() {
+		activeThumbRef.current = null;
 	}
 
 	function handleKeyDown(which: 'start' | 'end', e: KeyboardEvent) {
@@ -72,20 +98,14 @@ export function RangeSlider({ bounds, onChange, min = 0, max = 24 * 60, step = 3
 			<div
 				role="slider"
 				tabIndex={0}
+				data-thumb={which}
 				aria-label={which === 'start' ? 'Nobody before' : 'Nobody after'}
 				aria-valuemin={min}
 				aria-valuemax={max}
 				aria-valuenow={value}
 				aria-valuetext={minutesToLabel(value)}
-				class="group absolute top-1/2 flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-canvas-elevated bg-ink shadow-[0_1px_3px_rgba(0,0,0,0.3)] transition-transform cursor-grab touch-none hover:scale-110 active:scale-95 active:cursor-grabbing"
+				class="group absolute top-1/2 flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-canvas-elevated bg-ink shadow-[0_1px_3px_rgba(0,0,0,0.3)] transition-transform cursor-grab touch-none hover:scale-110 active:scale-95 active:cursor-grabbing before:absolute before:-inset-3 before:content-['']"
 				style={{ left: `${pct}%` }}
-				onPointerDown={(e) => {
-					(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-				}}
-				onPointerMove={(e) => {
-					if (e.buttons !== 1) return;
-					handleDrag(which, e.clientX);
-				}}
 				onKeyDown={(e) => handleKeyDown(which, e)}
 			>
 				<span class="pointer-events-none absolute -top-8 rounded-sm bg-ink px-2 py-1 text-body-sm text-on-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 whitespace-nowrap">
@@ -103,7 +123,13 @@ export function RangeSlider({ bounds, onChange, min = 0, max = 24 * 60, step = 3
 					{minutesToLabel(bounds.startMinute)} – {minutesToLabel(bounds.endMinute)}
 				</span>
 			</div>
-			<div ref={trackRef} class="relative h-5 py-1.5">
+			<div
+				ref={trackRef}
+				class="relative h-5 touch-none py-1.5"
+				onPointerDown={handleTrackPointerDown}
+				onPointerMove={handleTrackPointerMove}
+				onPointerUp={handleTrackPointerUp}
+			>
 				<div class="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-full bg-hairline" />
 				<div
 					class="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-link"

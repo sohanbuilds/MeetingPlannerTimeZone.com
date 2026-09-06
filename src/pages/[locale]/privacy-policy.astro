@@ -1,0 +1,75 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { languages, defaultLang } from '../../i18n/ui';
+import { useTranslatedPath } from '../../i18n/utils';
+import { privacyPolicyContent } from '../../i18n/content/privacy-policy';
+
+export function getStaticPaths() {
+	return Object.keys(languages)
+		.filter((l) => l !== defaultLang)
+		.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const content = privacyPolicyContent[locale!];
+const translatePath = useTranslatedPath(locale as keyof typeof languages);
+const contactEmail = 'hello@meetingplannertimezone.com';
+const lastUpdated = new Date('2026-09-06').toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<ToolLayout title={content.title} description={content.description}>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">{content.eyebrow}</p>
+			<h1 class="mt-2 text-display-xl text-ink">{content.h1}</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">{content.lastUpdatedLabel}: {lastUpdated}</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24 pt-16">
+		<div class="flex flex-col gap-8">
+			<div>
+				<p class="text-body-lg text-body">{content.intro}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.shortTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">{content.shortBody}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.collectTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">{content.collectBody}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.cookiesTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">{content.cookiesBody}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.thirdPartyTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">{content.thirdPartyBody}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.childrenTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">{content.childrenBody}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.changesTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">{content.changesBody}</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">{content.contactTitle}</h2>
+				<p class="mt-3 text-body-lg text-body">
+					{content.contactBodyBefore}
+					<a href={`mailto:${contactEmail}`} class="text-link hover:text-link-deep">{contactEmail}</a>{content.contactBodyMiddle}
+					<a href={translatePath('/contact')} class="text-link hover:text-link-deep">{content.contactLinkLabel}</a>{content.contactBodyAfter}
+				</p>
+			</div>
+		</div>
+	</section>
+</ToolLayout>

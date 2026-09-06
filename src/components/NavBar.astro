@@ -1,20 +1,27 @@
 ---
 import Logo from './Logo.astro';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+// /meeting-time (city pairs) is English-only, so its link is never localized.
 const links = [
-	{ href: '/meeting-time-calculator', label: 'Two-City Calculator' },
-	{ href: '/timezone-converter', label: 'Timezone Converter' },
-	{ href: '/world-clock', label: 'World Clock' },
-	{ href: '/meeting-time', label: 'City Pairs' },
+	{ href: translatePath('/meeting-time-calculator'), label: t('nav.calculator') },
+	{ href: translatePath('/timezone-converter'), label: t('nav.converter') },
+	{ href: translatePath('/world-clock'), label: t('nav.worldclock') },
+	{ href: '/meeting-time', label: t('nav.pairs') },
 ];
 const currentPath = Astro.url.pathname;
+const homeHref = translatePath('/');
 ---
 
 <header class="relative border-b border-hairline bg-canvas">
 	<nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
 		<a
-			href="/"
-			class={`flex items-center gap-2 text-label-sm tracking-tight ${currentPath === '/' ? 'font-semibold text-ink' : 'font-semibold text-body hover:text-ink'}`}
+			href={homeHref}
+			class={`flex items-center gap-2 text-label-sm tracking-tight ${currentPath === homeHref ? 'font-semibold text-ink' : 'font-semibold text-body hover:text-ink'}`}
 		>
 			<Logo class="w-6" />
 			MeetingPlannerTimeZone
@@ -36,9 +43,9 @@ const currentPath = Astro.url.pathname;
 		<details class="md:hidden">
 			<summary
 				class="flex cursor-pointer list-none items-center rounded-sm border border-hairline px-3 py-2 text-button-md text-ink transition-colors hover:border-mute [&::-webkit-details-marker]:hidden"
-				aria-label="Open menu"
+				aria-label={t('nav.openMenu')}
 			>
-				Menu
+				{t('nav.menu')}
 			</summary>
 			<div class="absolute inset-x-0 top-full z-20 border-b border-hairline bg-canvas-elevated shadow-[0_2px_2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08)]">
 				<ul class="flex flex-col px-6 py-3">

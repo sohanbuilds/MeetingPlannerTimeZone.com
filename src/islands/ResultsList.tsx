@@ -1,18 +1,12 @@
 import { ComfortBadge } from './ComfortBadge';
+import { SlotActions } from './SlotActions';
 import { getCityById } from '../lib/cities/lookup';
+import { formatHHMM } from '../lib/time/convert';
 import type { Participant, TimeSlot } from '../lib/time/types';
 
 function participantLabel(participant: Participant): string {
 	if (participant.label) return participant.label;
 	return getCityById(participant.cityId)?.name ?? participant.cityId;
-}
-
-function formatDisplayTime(hhmm: string): string {
-	const [hStr, mStr] = hhmm.split(':');
-	const h24 = Number(hStr);
-	const period = h24 < 12 ? 'AM' : 'PM';
-	const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
-	return `${h12}:${mStr} ${period}`;
 }
 
 interface ResultsListProps {
@@ -52,10 +46,23 @@ export function ResultsList({ slots, participants, selectedInstant, onSelect, li
 					const isSelected = selectedInstant === slot.utcInstant;
 					return (
 						<li key={slot.utcInstant}>
-							<button
-								type="button"
+							<div
+								role="button"
+								tabIndex={0}
+								aria-label={`Select time: ${slot.perParticipant
+									.map((p) => {
+										const participant = participants.find((pt) => pt.id === p.participantId);
+										return `${participant ? participantLabel(participant) : p.participantId} ${formatHHMM(p.localTime)}`;
+									})
+									.join(', ')}`}
 								onClick={() => onSelect(slot)}
-								class={`w-full rounded-md border p-4 text-left transition-all duration-150 ${
+								onKeyDown={(e) => {
+									if (e.key === 'Enter' || e.key === ' ') {
+										e.preventDefault();
+										onSelect(slot);
+									}
+								}}
+								class={`w-full cursor-pointer rounded-md border p-4 text-left transition-all duration-150 ${
 									isSelected
 										? 'border-link bg-link-soft/40 shadow-[0_0_0_1px_var(--color-link)]'
 										: 'border-hairline bg-canvas-elevated hover:-translate-y-0.5 hover:border-mute hover:shadow-[0_2px_2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08)]'
@@ -79,7 +86,7 @@ export function ResultsList({ slots, participants, selectedInstant, onSelect, li
 													{participant ? participantLabel(participant) : p.participantId}
 												</p>
 												<p class="text-heading-md text-ink" style={{ fontVariantNumeric: 'tabular-nums' }}>
-													{formatDisplayTime(p.localTime)}
+													{formatHHMM(p.localTime)}
 													{p.isNextDay && <sup class="ml-1 text-body-sm text-mute">+1</sup>}
 													{p.isPrevDay && <sup class="ml-1 text-body-sm text-mute">-1</sup>}
 												</p>
@@ -87,7 +94,10 @@ export function ResultsList({ slots, participants, selectedInstant, onSelect, li
 										);
 									})}
 								</div>
-							</button>
+								<div class="mt-3 flex justify-end border-t border-hairline pt-3">
+									<SlotActions participants={participants} slot={slot} />
+								</div>
+							</div>
 						</li>
 					);
 				})}

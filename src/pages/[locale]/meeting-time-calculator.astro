@@ -1,0 +1,59 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { TwoCityCalculator } from '../../islands/TwoCityCalculator';
+import { languages, defaultLang } from '../../i18n/ui';
+import { meetingTimeCalculatorContent } from '../../i18n/content/meeting-time-calculator';
+
+export function getStaticPaths() {
+	return Object.keys(languages)
+		.filter((l) => l !== defaultLang)
+		.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const content = meetingTimeCalculatorContent[locale!];
+
+const faqJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: content.faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.q,
+		acceptedAnswer: { '@type': 'Answer', text: faq.a },
+	})),
+};
+---
+
+<ToolLayout title={content.title} description={content.description}>
+	<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} is:inline />
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-3xl">
+			<p class="text-mono-eyebrow uppercase text-mute">{content.eyebrow}</p>
+			<h1 class="mt-2 text-display-xl text-ink">{content.h1}</h1>
+			<p class="mt-4 text-body-lg text-body">{content.intro}</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-4xl px-6 pb-16 pt-16">
+		<TwoCityCalculator client:only="preact" />
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24">
+		<h2 class="text-heading-lg text-ink">{content.faqHeading}</h2>
+		<div class="mt-6 flex flex-col gap-4">
+			{
+				content.faqs.map((faq) => (
+					<details class="card group">
+						<summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-heading-md text-ink [&::-webkit-details-marker]:hidden">
+							{faq.q}
+							<span class="shrink-0 text-mute transition-transform duration-150 group-open:rotate-180" aria-hidden="true">
+								▾
+							</span>
+						</summary>
+						<p class="mt-3 text-body-md text-body">{faq.a}</p>
+					</details>
+				))
+			}
+		</div>
+	</section>
+</ToolLayout>

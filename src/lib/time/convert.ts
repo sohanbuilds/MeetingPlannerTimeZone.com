@@ -75,3 +75,12 @@ export function formatLocalTime(dt: DateTime): string {
 export function formatDisplayTime(dt: DateTime): string {
 	return dt.toFormat('h:mm a');
 }
+
+/** Formats an "HH:mm" (24h) string for display, e.g. "09:30" -> "9:30 AM". */
+export function formatHHMM(hhmm: string): string {
+	const [hStr, mStr] = hhmm.split(':');
+	const h24 = Number(hStr);
+	const period = h24 < 12 ? 'AM' : 'PM';
+	const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+	return `${h12}:${mStr} ${period}`;
+}

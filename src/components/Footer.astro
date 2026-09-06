@@ -1,33 +1,49 @@
 ---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
 const columns = [
 	{
-		title: 'Tools',
+		title: t('footer.tools'),
 		links: [
-			{ href: '/', label: 'Multi-City Meeting Planner' },
-			{ href: '/meeting-time-calculator', label: 'Best Time to Call / Two-City Calculator' },
-			{ href: '/timezone-converter', label: 'Timezone Converter' },
-			{ href: '/world-clock', label: 'World Clock' },
+			{ href: translatePath('/'), label: t('footer.tools.planner') },
+			{ href: translatePath('/meeting-time-calculator'), label: t('footer.tools.calculator') },
+			{ href: translatePath('/timezone-converter'), label: t('footer.tools.converter') },
+			{ href: translatePath('/world-clock'), label: t('footer.tools.worldclock') },
 		],
 	},
 	{
-		title: 'Popular pairs',
+		// City-pair pages are English-only, so these links are never localized.
+		title: t('footer.pairs'),
 		links: [
-			{ href: '/meeting-time/new-york-to-london', label: 'New York to London' },
-			{ href: '/meeting-time/new-york-to-mumbai', label: 'New York to Mumbai' },
-			{ href: '/meeting-time/london-to-singapore', label: 'London to Singapore' },
-			{ href: '/meeting-time', label: 'Browse all city pairs' },
+			{ href: '/meeting-time/new-york-to-london', label: t('footer.pairs.nyLondon') },
+			{ href: '/meeting-time/new-york-to-mumbai', label: t('footer.pairs.nyMumbai') },
+			{ href: '/meeting-time/london-to-singapore', label: t('footer.pairs.londonSingapore') },
+			{ href: '/meeting-time', label: t('footer.pairs.browseAll') },
 		],
 	},
 	{
-		title: 'Company',
+		title: t('footer.company'),
 		links: [
-			{ href: '/about', label: 'About us' },
-			{ href: '/contact', label: 'Contact us' },
-			{ href: '/privacy-policy', label: 'Privacy policy' },
-			{ href: '/terms', label: 'Terms & conditions' },
+			{ href: translatePath('/about'), label: t('footer.company.about') },
+			{ href: translatePath('/contact'), label: t('footer.company.contact') },
+			{ href: translatePath('/privacy-policy'), label: t('footer.company.privacy') },
+			{ href: translatePath('/terms'), label: t('footer.company.terms') },
 		],
 	},
 ];
+
+const canonicalPath = (() => {
+	const prefixMatch = Astro.url.pathname.match(/^\/([a-z]{2})(\/|$)/);
+	if (prefixMatch && prefixMatch[1] in languages && prefixMatch[1] !== 'en') {
+		return Astro.url.pathname.slice(prefixMatch[1].length + 1) || '/';
+	}
+	return Astro.url.pathname;
+})();
 ---
 
 <footer class="border-t border-hairline bg-canvas">
@@ -36,8 +52,7 @@ const columns = [
 			<div>
 				<p class="text-label-sm font-semibold text-ink">MeetingPlannerTimeZone</p>
 				<p class="mt-2 max-w-md text-body-sm text-mute">
-					Find the best time to meet or call across time zones — no sign-up, no clutter, just a clear
-					answer.
+					{t('footer.tagline')}
 				</p>
 			</div>
 			{
@@ -57,7 +72,30 @@ const columns = [
 				))
 			}
 		</div>
-		<p class="mt-16 text-body-sm text-faint">
+		<div class="mt-16 flex flex-wrap items-center gap-x-4 gap-y-2">
+			<span class="text-mono-eyebrow uppercase text-mute">{t('footer.language')}</span>
+			<ul class="flex flex-wrap gap-x-3 gap-y-1">
+				{
+					Object.entries(languages).map(([code, label]) => {
+						const altTranslatePath = useTranslatedPath(code as keyof typeof languages);
+						const href = altTranslatePath(canonicalPath);
+						const isActive = code === lang;
+						return (
+							<li>
+								<a
+									href={href}
+									aria-current={isActive ? 'true' : undefined}
+									class={`text-body-sm ${isActive ? 'font-semibold text-ink' : 'text-mute hover:text-ink'}`}
+								>
+									{label}
+								</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</div>
+		<p class="mt-4 text-body-sm text-faint">
 			© {new Date().getFullYear()} MeetingPlannerTimeZone.com
 		</p>
 	</div>

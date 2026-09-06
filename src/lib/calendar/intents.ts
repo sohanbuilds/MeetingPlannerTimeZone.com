@@ -32,3 +32,8 @@ export function outlookCalendarUrl(event: CalendarEvent): string {
 	});
 	return `https://outlook.office.com/calendar/0/deeplink/compose?${params.toString()}`;
 }
+
+/** Plain-text invitation, pasteable into an email or chat message. */
+export function buildInvitationText(event: CalendarEvent): string {
+	return ['Proposed meeting time:', ...event.participantLines].join('\n');
+}

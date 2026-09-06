@@ -1,0 +1,29 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { TimezoneConverter } from '../../islands/TimezoneConverter';
+import { languages, defaultLang } from '../../i18n/ui';
+import { timezoneConverterContent } from '../../i18n/content/timezone-converter';
+
+export function getStaticPaths() {
+	return Object.keys(languages)
+		.filter((l) => l !== defaultLang)
+		.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params;
+const content = timezoneConverterContent[locale!];
+---
+
+<ToolLayout title={content.title} description={content.description}>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">{content.eyebrow}</p>
+			<h1 class="mt-2 text-display-xl text-ink">{content.h1}</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">{content.intro}</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-5xl px-6 pb-24 pt-16">
+		<TimezoneConverter client:only="preact" />
+	</section>
+</ToolLayout>
