@@ -126,10 +126,42 @@
   --radius-full: 9999px;
 }
 
+/* Dark theme — overrides the DESIGN.md color tokens above. Scoped to html.dark (set by the
+   theme-toggle script) rather than prefers-color-scheme, so the toggle button always wins.
+   Every component reads colors through these tokens, so this block is the entire dark theme. */
+html.dark {
+  color-scheme: dark;
+  --color-primary: #ededed;
+  --color-on-primary: #0a0a0a;
+  --color-ink: #ededed;
+  --color-body: #b4b4b4;
+  --color-faint: #6e6e6e;
+  --color-hairline: #2e2e2e;
+  --color-hairline-soft: #222222;
+  --color-canvas: #0a0a0a;
+  --color-canvas-elevated: #171717;
+  --color-link: #3694ff;
+  --color-link-deep: #6cb2ff;
+  --color-link-soft: #123055;
+  --color-error: #ff6166;
+  --color-error-deep: #ffb3b5;
+  --color-warning-soft: #3d2a0a;
+  --color-warning-deep: #ffd08a;
+  --color-violet-soft: #2c2140;
+  --color-cyan-soft: #0f3a32;
+}
+
 @layer base {
+  html {
+    color-scheme: light;
+  }
+
   body {
     background-color: var(--color-canvas);
     color: var(--color-ink);
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
   }
 }
 

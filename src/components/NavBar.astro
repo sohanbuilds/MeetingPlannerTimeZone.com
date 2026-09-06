@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -40,31 +41,34 @@ const homeHref = translatePath('/');
 				))
 			}
 		</div>
-		<details class="md:hidden">
-			<summary
-				class="flex cursor-pointer list-none items-center rounded-sm border border-hairline px-3 py-2 text-button-md text-ink transition-colors hover:border-mute [&::-webkit-details-marker]:hidden"
-				aria-label={t('nav.openMenu')}
-			>
-				{t('nav.menu')}
-			</summary>
-			<div class="absolute inset-x-0 top-full z-20 border-b border-hairline bg-canvas-elevated shadow-[0_2px_2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08)]">
-				<ul class="flex flex-col px-6 py-3">
-					{
-						links.map((link) => (
-							<li>
-								<a
-									href={link.href}
-									class={`block rounded-sm px-3 py-2 text-body-md ${
-										currentPath === link.href ? 'text-ink font-medium' : 'text-body'
-									}`}
-								>
-									{link.label}
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</div>
-		</details>
+		<div class="flex items-center gap-2">
+			<ThemeToggle />
+			<details class="md:hidden">
+				<summary
+					class="flex cursor-pointer list-none items-center rounded-sm border border-hairline px-3 py-2 text-button-md text-ink transition-colors hover:border-mute [&::-webkit-details-marker]:hidden"
+					aria-label={t('nav.openMenu')}
+				>
+					{t('nav.menu')}
+				</summary>
+				<div class="absolute inset-x-0 top-full z-20 border-b border-hairline bg-canvas-elevated shadow-[0_2px_2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08)]">
+					<ul class="flex flex-col px-6 py-3">
+						{
+							links.map((link) => (
+								<li>
+									<a
+										href={link.href}
+										class={`block rounded-sm px-3 py-2 text-body-md ${
+											currentPath === link.href ? 'text-ink font-medium' : 'text-body'
+										}`}
+									>
+										{link.label}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</details>
+		</div>
 	</nav>
 </header>
