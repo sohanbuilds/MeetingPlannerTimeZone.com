@@ -1,0 +1,96 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const contactEmail = 'hello@meetingplannertimezone.com';
+const lastUpdated = 'September 6, 2026';
+---
+
+<ToolLayout
+	title="Privacy Policy — MeetingPlannerTimeZone"
+	description="MeetingPlannerTimeZone's privacy policy — how the site handles data, cookies, and analytics."
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">Privacy policy</p>
+			<h1 class="mt-2 text-display-xl text-ink">Privacy policy</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">Last updated: {lastUpdated}</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24 pt-16">
+		<div class="flex flex-col gap-8">
+			<div>
+				<p class="text-body-lg text-body">
+					MeetingPlannerTimeZone ("we", "us") provides free time zone planning tools at
+					meetingplannertimezone.com (the "Site"). This policy explains what data the Site collects and how
+					it's used.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">The short version</h2>
+				<p class="mt-3 text-body-lg text-body">
+					There are no accounts, and the tools on this Site run entirely in your browser. The cities,
+					dates, and times you enter are not sent to or stored on our servers — they're used only to
+					compute the result on your screen. When you share a link, the details of your selection are
+					encoded directly into that link's URL, not stored in a database.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Information we collect</h2>
+				<p class="mt-3 text-body-lg text-body">
+					Like most websites, our hosting provider automatically logs standard technical data for every
+					visit — such as IP address, browser type, device type, referring page, and pages viewed — for
+					security and to keep the Site running reliably. We may also use privacy-focused analytics to
+					understand aggregate traffic, such as which tools are used most and which pages are popular. This
+					data is not used to identify individual visitors.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Cookies</h2>
+				<p class="mt-3 text-body-lg text-body">
+					The Site does not use cookies to track you across other websites or to build advertising
+					profiles. If that changes — for example, if we add analytics or advertising that relies on
+					cookies — we'll update this policy and provide a way to control your preferences.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Third-party services</h2>
+				<p class="mt-3 text-body-lg text-body">
+					We may use third-party services for hosting, analytics, or performance monitoring. These
+					providers may process technical data (like the items listed above) under their own privacy
+					policies. We choose providers that don't sell personal data and don't require account creation to
+					use this Site.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Children's privacy</h2>
+				<p class="mt-3 text-body-lg text-body">
+					This Site is not directed at children and we do not knowingly collect personal information from
+					children.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Changes to this policy</h2>
+				<p class="mt-3 text-body-lg text-body">
+					We may update this policy from time to time. The "Last updated" date at the top of this page
+					reflects the most recent revision.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Contact</h2>
+				<p class="mt-3 text-body-lg text-body">
+					Questions about this policy can be sent to
+					<a href={`mailto:${contactEmail}`} class="text-link hover:text-link-deep">{contactEmail}</a>, or
+					via our <a href="/contact" class="text-link hover:text-link-deep">Contact page</a>.
+				</p>
+			</div>
+		</div>
+	</section>
+</ToolLayout>

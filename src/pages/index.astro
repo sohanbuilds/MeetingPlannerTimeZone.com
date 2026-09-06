@@ -1,0 +1,270 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import { MeetingPlanner } from '../islands/MeetingPlanner';
+
+const title = 'Meeting Planner — Find the Best Time to Meet Across Time Zones';
+const description =
+	'Free meeting planner and world clock for time zone scheduling. Compare working hours across cities, get a Comfort Score for every slot, and share the best global meeting time instantly.';
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'WebApplication',
+	name: 'MeetingPlannerTimeZone',
+	alternateName: 'Meeting Planner',
+	url: 'https://meetingplannertimezone.com/',
+	applicationCategory: 'BusinessApplication',
+	operatingSystem: 'Any',
+	offers: {
+		'@type': 'Offer',
+		price: '0',
+		priceCurrency: 'USD',
+	},
+	description,
+};
+
+const faqs = [
+	{
+		q: 'What is a meeting planner?',
+		a: "A meeting planner is a tool that finds a time to meet or call that actually works for everyone involved — by comparing time zones, working hours, and availability across every participant, instead of leaving you to do that math by hand. This one adds a Comfort Score on top, so you can see which times are genuinely convenient, not just technically possible.",
+	},
+	{
+		q: 'Is this meeting planner really free to use?',
+		a: 'Yes. Every tool on this site — the multi-city planner, the two-city calculator, the timezone converter, and the world clock — is free to use, with no paywall on any feature.',
+	},
+	{
+		q: 'Do I need to sign up or create an account?',
+		a: "No. There's no account system at all. Add your cities, adjust the settings, and use the shareable link to save or send a result — everything works without creating a login.",
+	},
+	{
+		q: 'How does the Comfort Score work?',
+		a: "Each candidate time is rated Excellent, Good, or Poor for every participant based on their work or waking hours, their weekends, and how far the slot falls from the middle of their day. A time only earns a high score if it's genuinely convenient for everyone, not just technically inside business hours for all parties.",
+	},
+	{
+		q: 'Does the tool account for daylight saving time changes?',
+		a: "Yes. Daylight saving transitions shift a city's UTC offset by an hour on different dates depending on the country, and this planner always calculates using the current, correct offset for whichever date you've selected — never a fixed or approximate one.",
+	},
+	{
+		q: 'How many cities or participants can I add?',
+		a: "There's no cap. Add as many cities and named participants as your meeting actually needs — the Comfort Score recalculates for the whole group instantly as you add more.",
+	},
+	{
+		q: 'Can I share the meeting time I find with someone else?',
+		a: 'Yes. The "Copy shareable link" button encodes your cities, names, date, and settings directly into the URL, so anyone you send it to sees the exact same result — no re-entering information or explaining the time zone math over email.',
+	},
+	{
+		q: 'Is my data saved, and is it private?',
+		a: "Nothing is stored on a server or tied to an account — calculations happen in your browser, and the only place your setup is saved is inside the shareable link itself, which only you choose to send.",
+	},
+	{
+		q: "What's the best way to start a meeting when everyone's in a different time zone?",
+		a: "Confirm the time zone conversion before you send the invite, not after — state the meeting time in each attendee's own local time rather than assuming everyone will convert it themselves, and start on time even if the slot falls outside standard hours for one participant, since that's usually the person who made the biggest accommodation to be there.",
+	},
+	{
+		q: "What's the difference between this meeting planner and a plain time zone converter?",
+		a: "A converter only tells you what time it is elsewhere. This meeting planner ranks every hour of the day for every participant at once, factoring in each person's work or waking hours and weekends, so you get a shortlist of times worth actually proposing instead of a raw conversion you still have to evaluate yourself.",
+	},
+	{
+		q: 'Does this work on mobile?',
+		a: "Yes — the planner, calculator, converter, and world clock are all fully usable on mobile, with no separate app required.",
+	},
+];
+
+const faqJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.q,
+		acceptedAnswer: { '@type': 'Answer', text: faq.a },
+	})),
+};
+
+const features = [
+	{
+		icon: '🎯',
+		title: 'Comfort Score, not just overlap',
+		body: 'Every candidate time is rated Excellent, Good, or Poor based on how convenient it actually is for each person — not just whether it falls in daylight hours.',
+	},
+	{
+		icon: '♾️',
+		title: 'No city limit',
+		body: 'Add as many participants as you need. No 12-city cap, no page reloads to add one more person.',
+	},
+	{
+		icon: '🔗',
+		title: 'Real shareable links',
+		body: 'One click copies a link with your cities, date, and settings already baked in — no manual URL editing required.',
+	},
+	{
+		icon: '🕐',
+		title: 'Named participants, custom hours',
+		body: 'Give each person a name and their own work hours or waking hours — not a generic "Location 1, Location 2."',
+	},
+];
+---
+
+<ToolLayout title={title} description={description}>
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+	<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} is:inline />
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-32">
+		<div class="mx-auto max-w-2xl text-center">
+			<p class="text-mono-eyebrow uppercase text-mute">Time zone meeting planner</p>
+			<h1 class="mt-2 text-display-xl text-ink">
+				The <span class="gradient-text">meeting planner</span> that finds the best time to meet, wherever
+				everyone is
+			</h1>
+			<p class="mt-4 text-body-lg text-body">
+				Add every city, set each person's working or waking hours, and let the Comfort Score find the time
+				that's actually good for everyone — not just technically possible.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-6xl px-6 py-16">
+		<MeetingPlanner client:only="preact" />
+	</section>
+
+	<section class="border-t border-hairline bg-canvas px-6 py-24">
+		<div class="mx-auto max-w-6xl">
+			<p class="text-center text-mono-eyebrow uppercase text-mute">Why this beats a spreadsheet</p>
+			<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+				{
+					features.map((feature) => (
+						<div class="card card-interactive">
+							<span class="text-heading-lg" aria-hidden="true">
+								{feature.icon}
+							</span>
+							<h2 class="mt-3 text-heading-md text-ink">{feature.title}</h2>
+							<p class="mt-2 text-body-md text-body">{feature.body}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="border-t border-hairline bg-canvas px-6 py-24">
+		<div class="mx-auto max-w-3xl">
+			<p class="text-mono-eyebrow uppercase text-mute">About this tool</p>
+			<h2 class="mt-2 text-heading-lg text-ink">A meeting planner built for every time zone on earth</h2>
+			<p class="mt-4 text-body-md text-body">
+				Coordinating a call across three continents shouldn't require a spreadsheet, four browser tabs, and
+				a mental table of UTC offsets. This meeting planner was built to replace all of that with a single
+				page: add the cities involved, and the tool immediately shows which hours actually work for
+				everyone — not just which hours are theoretically possible.
+			</p>
+			<p class="mt-4 text-body-md text-body">
+				Most so-called time zone meeting planner tools stop at overlap. They show you the block of hours
+				where every city's clock reads somewhere between 9 and 5, and call it done. That ignores the
+				reality of remote work: 9 AM in one city might be a perfectly normal start to the day, while the
+				"overlapping" 5 PM slot in another city means someone is joining a call after their kids are
+				already in bed. A real meeting planner time zone tool needs to account for how a time actually
+				feels to the person living it, not just whether it falls inside a generic business-hours box.
+			</p>
+
+			<h3 class="mt-8 text-heading-md text-ink">Why a world clock meeting planner needs a Comfort Score</h3>
+			<p class="mt-3 text-body-md text-body">
+				That's the problem this tool solves with its Comfort Score. Every candidate meeting time is rated
+				Excellent, Good, or Poor based on how convenient it is for each named participant — factoring in
+				their own work hours, their weekends, and whether the slot falls early morning, late evening, or
+				squarely in the middle of a normal day. Add a colleague in Singapore, a client in São Paulo, and a
+				teammate in Berlin, and instead of squinting at three separate clocks you get a ranked list of
+				times where the meeting is genuinely good for everyone, not merely attendable.
+			</p>
+			<p class="mt-3 text-body-md text-body">
+				This is what separates a real meeting planner from a plain world clock. A world clock meeting
+				planner that only tells you the current time in each city still leaves you to do the comparison
+				yourself. This tool does the comparison for you, across as many cities as you need — there's no
+				12-city cap, no reload required to add "just one more" participant, and no limit on how many
+				international offices you're trying to align.
+			</p>
+
+			<h3 class="mt-8 text-heading-md text-ink">Designed as an international meeting planner from day one</h3>
+			<p class="mt-3 text-body-md text-body">
+				Distributed teams rarely stay confined to two time zones for long, which is why this was designed
+				from the start as an international meeting planner rather than a two-city gadget bolted on
+				afterward. Add a fourth city, a fifth, a tenth — the Comfort Score recalculates for the whole group
+				instantly. Each participant can be named individually too, so instead of staring at "Location 1"
+				and "Location 2" you see "Priya (Mumbai)" and "Tom (Chicago)," which makes it far easier to spot at
+				a glance whose morning you'd be disrupting.
+			</p>
+			<p class="mt-3 text-body-md text-body">
+				For anyone managing global meeting planner duties — scheduling standups across a distributed
+				engineering org, syncing a marketing team split between three regions, or simply finding a call
+				time between a client and an agency on opposite sides of the planet — the goal is the same:
+				minimize the number of people who have to take an inconvenient call, and make it obvious which
+				option does that best.
+			</p>
+
+			<h3 class="mt-8 text-heading-md text-ink">A time zone meeting planner that handles the details automatically</h3>
+			<p class="mt-3 text-body-md text-body">
+				Time zone math has more edge cases than most people expect, and this planner handles them so you
+				don't have to think about them. Daylight saving transitions shift a city's UTC offset by an hour on
+				dates that differ by country, and this meeting planner time zone engine always uses the correct,
+				current offset for whatever date you've selected — not a cached or approximate one. Cross a date
+				line and the calculator adjusts the day of the week automatically, so a Friday afternoon call from
+				Los Angeles doesn't quietly turn into a Saturday morning ask in Auckland without anyone noticing.
+			</p>
+			<p class="mt-3 text-body-md text-body">
+				Each participant can also be set to Work mode or Personal mode. Work mode sticks to standard
+				working hours and respects weekends; Personal mode broadens the acceptable window for a casual
+				catch-up call with family or friends, using waking hours instead of office hours. Combined with an
+				adjustable acceptable-hours slider, this makes the tool equally useful as a professional meeting
+				planner and as a simple time and date meeting planner for personal use — birthday calls,
+				long-distance relationships, or catching a friend before they head to bed.
+			</p>
+
+			<h3 class="mt-8 text-heading-md text-ink">Share the result, not just the screenshot</h3>
+			<p class="mt-3 text-body-md text-body">
+				Once you've found a time that works, the "Copy shareable link" button encodes every city, name,
+				work-hour setting, and chosen date directly into the URL. Send that link to a colleague or client
+				and they see the exact same ranked list of times — no re-entering cities, no explaining which slot
+				you meant, no back-and-forth over email trying to describe a time zone difference in words. It
+				works the same way whether you're planning a one-off call or bookmarking a recurring meeting
+				planner time zones setup you use every week.
+			</p>
+
+			<h3 class="mt-8 text-heading-md text-ink">Who this meeting planner is for</h3>
+			<p class="mt-3 text-body-md text-body">
+				This tool is built for anyone who regularly asks "what time is that for them?" — remote and hybrid
+				teams spread across regions, recruiters scheduling interviews with international candidates,
+				customer success teams supporting clients abroad, journalists coordinating with sources overseas,
+				and families keeping in touch across countries. If your work or your life crosses even one time
+				zone boundary, a dedicated meeting planner saves the mental overhead of doing that conversion by
+				hand every single time.
+			</p>
+			<p class="mt-3 text-body-md text-body">
+				Beyond the multi-city planner above, related tools on this site cover more specific needs: a{' '}
+				<a href="/meeting-time-calculator" class="text-link hover:text-link-deep">two-city calculator</a>{' '}
+				for quickly finding the best time to call one other person, a straightforward{' '}
+				<a href="/timezone-converter" class="text-link hover:text-link-deep">timezone converter</a> for
+				checking a single time conversion, and a live{' '}
+				<a href="/world-clock" class="text-link hover:text-link-deep">world clock</a> for glancing at the
+				current time in any city. Together they cover the full range of what a meeting planner time zone
+				tool should do — from a quick one-off check to full scheduling across a global, distributed team.
+			</p>
+		</div>
+	</section>
+
+	<section class="border-t border-hairline bg-canvas px-6 py-24">
+		<div class="mx-auto max-w-3xl">
+			<p class="text-mono-eyebrow uppercase text-mute">FAQ</p>
+			<h2 class="mt-2 text-heading-lg text-ink">Frequently asked questions</h2>
+			<div class="mt-6 flex flex-col gap-4">
+				{
+					faqs.map((faq) => (
+						<details class="card group">
+							<summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-heading-md text-ink [&::-webkit-details-marker]:hidden">
+								{faq.q}
+								<span class="shrink-0 text-mute transition-transform duration-150 group-open:rotate-180" aria-hidden="true">
+									▾
+								</span>
+							</summary>
+							<p class="mt-3 text-body-md text-body">{faq.a}</p>
+						</details>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</ToolLayout>

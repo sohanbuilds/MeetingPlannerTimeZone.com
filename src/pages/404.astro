@@ -1,0 +1,50 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const links = [
+	{ href: '/meeting-time-calculator', label: 'Two-City Calculator' },
+	{ href: '/timezone-converter', label: 'Timezone Converter' },
+	{ href: '/world-clock', label: 'World Clock' },
+	{ href: '/meeting-time', label: 'City Pairs' },
+];
+---
+
+<ToolLayout
+	title="Page Not Found — MeetingPlannerTimeZone"
+	description="The page you're looking for doesn't exist. Head back to MeetingPlannerTimeZone to plan your next meeting."
+	noindex
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-24">
+		<div class="mx-auto max-w-2xl text-center">
+			<p class="text-mono-eyebrow uppercase text-mute">404</p>
+			<h1 class="mt-2 text-display-xl text-ink">This page doesn't exist in any time zone</h1>
+			<p class="mt-4 text-body-lg text-body">
+				The link might be broken, or the page may have moved. Let's get you back on track.
+			</p>
+			<div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+				<a
+					href="/"
+					class="rounded-[100px] bg-ink px-3.5 py-3 text-button-lg text-on-primary transition-colors hover:opacity-90"
+				>
+					Back to home
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 py-16">
+		<p class="text-center text-mono-eyebrow uppercase text-mute">Or try one of these</p>
+		<div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+			{
+				links.map((link) => (
+					<a
+						href={link.href}
+						class="rounded-full border border-hairline px-3 py-2 text-body-md text-body transition-colors hover:border-mute hover:text-ink"
+					>
+						{link.label}
+					</a>
+				))
+			}
+		</div>
+	</section>
+</ToolLayout>

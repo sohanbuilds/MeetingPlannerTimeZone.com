@@ -1,0 +1,53 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+	title="About — MeetingPlannerTimeZone"
+	description="MeetingPlannerTimeZone is a free set of time zone tools for finding the best time to meet or call across the world — no sign-up required."
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">About</p>
+			<h1 class="mt-2 text-display-xl text-ink">Time zone math, without the headache</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">
+				MeetingPlannerTimeZone is a small collection of free tools for figuring out when to meet or call
+				someone in another part of the world.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24 pt-16">
+		<div class="flex flex-col gap-8">
+			<div>
+				<h2 class="text-heading-md text-ink">Why this exists</h2>
+				<p class="mt-3 text-body-lg text-body">
+					Scheduling across time zones is a small problem, but it's an annoying one — juggling UTC offsets,
+					daylight saving changes, and "wait, is that AM or PM their time?" shouldn't take longer than the
+					meeting itself. This site brings the tools we kept reaching for into one place: a multi-city
+					meeting planner, a two-city calculator, a timezone converter, and a world clock.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">How it works</h2>
+				<p class="mt-3 text-body-lg text-body">
+					Every calculation runs directly in your browser. There's no account to create and no server
+					processing your schedule — pick your cities, and the tool does the conversion instantly. When you
+					share a link, the details are encoded in the URL itself so the person on the other end sees the
+					same result you do.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Feedback</h2>
+				<p class="mt-3 text-body-lg text-body">
+					Found a bug, or have an idea for a tool that would help? <a
+						href="/contact"
+						class="text-link hover:text-link-deep">Get in touch</a
+					> — we'd like to hear about it.
+				</p>
+			</div>
+		</div>
+	</section>
+</ToolLayout>

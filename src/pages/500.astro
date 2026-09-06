@@ -1,0 +1,33 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+	title="Something Went Wrong — MeetingPlannerTimeZone"
+	description="Something went wrong on our end. Please try again in a moment."
+	noindex
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-24">
+		<div class="mx-auto max-w-2xl text-center">
+			<p class="text-mono-eyebrow uppercase text-mute">500</p>
+			<h1 class="mt-2 text-display-xl text-ink">Something went wrong on our end</h1>
+			<p class="mt-4 text-body-lg text-body">
+				That's on us, not you. Try refreshing the page, or head back to home and try again.
+			</p>
+			<div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+				<a
+					href="/"
+					class="rounded-[100px] bg-ink px-3.5 py-3 text-button-lg text-on-primary transition-colors hover:opacity-90"
+				>
+					Back to home
+				</a>
+				<a
+					href="/contact"
+					class="rounded-full border border-hairline px-3.5 py-3 text-button-lg text-ink transition-colors hover:border-mute"
+				>
+					Report the problem
+				</a>
+			</div>
+		</div>
+	</section>
+</ToolLayout>

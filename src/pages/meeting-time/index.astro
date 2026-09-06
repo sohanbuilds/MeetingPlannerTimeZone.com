@@ -1,0 +1,70 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { PairFinder } from '../../islands/PairFinder';
+import { getCityById, pairSlug } from '../../lib/cities/lookup';
+
+const POPULAR_PAIR_IDS: [string, string][] = [
+	['new-york', 'london'],
+	['new-york', 'mumbai'],
+	['new-york', 'tokyo'],
+	['new-york', 'sao-paulo'],
+	['new-york', 'toronto'],
+	['new-york', 'singapore'],
+	['san-francisco', 'london'],
+	['san-francisco', 'singapore'],
+	['san-francisco', 'tokyo'],
+	['london', 'singapore'],
+	['london', 'dubai'],
+	['london', 'new-delhi'],
+	['london', 'hong-kong'],
+	['london', 'berlin'],
+	['london', 'johannesburg'],
+	['dubai', 'mumbai'],
+	['singapore', 'sydney'],
+	['singapore', 'hong-kong'],
+	['sydney', 'london'],
+	['toronto', 'london'],
+];
+
+const popularPairs = POPULAR_PAIR_IDS.map(([fromId, toId]) => ({
+	from: getCityById(fromId)!,
+	to: getCityById(toId)!,
+	slug: pairSlug(fromId, toId),
+}));
+---
+
+<ToolLayout
+	title="Meeting Planner Time Zones by City Pair — Browse Every Route"
+	description="Browse this meeting planner's city-pair library to find the best meeting or call time between any two major cities across the world's meeting planner time zones."
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">City pairs</p>
+			<h1 class="mt-2 text-display-xl text-ink">Meeting times between cities</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">
+				Pick two cities to jump straight to their dedicated meeting-time page, or browse the popular pairs
+				below.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-5xl px-6 pb-16 pt-16">
+		<PairFinder client:only="preact" />
+	</section>
+
+	<section class="mx-auto max-w-5xl px-6 pb-24">
+		<h2 class="mb-4 text-heading-lg text-ink">Popular pairs</h2>
+		<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+			{
+				popularPairs.map((pair) => (
+					<a
+						href={`/meeting-time/${pair.slug}`}
+						class="rounded-md border border-hairline bg-canvas-elevated px-4 py-3 text-body-md text-ink transition-all hover:-translate-y-0.5 hover:border-link hover:shadow-[0_2px_2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.06)]"
+					>
+						{pair.from.name} to {pair.to.name}
+					</a>
+				))
+			}
+		</div>
+	</section>
+</ToolLayout>

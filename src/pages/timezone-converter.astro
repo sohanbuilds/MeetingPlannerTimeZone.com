@@ -1,0 +1,24 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import { TimezoneConverter } from '../islands/TimezoneConverter';
+---
+
+<ToolLayout
+	title="Timezone Meeting Planner Converter — Convert a Time to Any City"
+	description="A timezone meeting planner tool: enter a time in one city and instantly see the corresponding time in others — correctly handling day changes when a conversion crosses midnight."
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">Timezone converter</p>
+			<h1 class="mt-2 text-display-xl text-ink">Convert a time to any city</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">
+				Enter a date and time in one city and see it converted everywhere else — including the day change when
+				a conversion crosses midnight, like 10 PM Monday in New York becoming 7:30 AM Tuesday in India.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-5xl px-6 pb-24 pt-16">
+		<TimezoneConverter client:only="preact" />
+	</section>
+</ToolLayout>

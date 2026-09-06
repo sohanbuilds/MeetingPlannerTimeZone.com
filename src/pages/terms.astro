@@ -1,0 +1,85 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const contactEmail = 'hello@meetingplannertimezone.com';
+const lastUpdated = 'September 6, 2026';
+---
+
+<ToolLayout
+	title="Terms & Conditions — MeetingPlannerTimeZone"
+	description="Terms and conditions for using the free MeetingPlannerTimeZone time zone planning tools."
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">Terms &amp; conditions</p>
+			<h1 class="mt-2 text-display-xl text-ink">Terms &amp; conditions</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">Last updated: {lastUpdated}</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24 pt-16">
+		<div class="flex flex-col gap-8">
+			<div>
+				<p class="text-body-lg text-body">
+					By using meetingplannertimezone.com (the "Site"), you agree to these terms. If you don't agree,
+					please don't use the Site.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Use of the Site</h2>
+				<p class="mt-3 text-body-lg text-body">
+					The Site is provided free of charge for personal and professional use in planning meetings and
+					calls across time zones. You may not use the Site in any way that disrupts its operation, attempt
+					to access it through automated means that place unreasonable load on it, or use it for any
+					unlawful purpose.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">No warranty</h2>
+				<p class="mt-3 text-body-lg text-body">
+					The Site is provided "as is" and "as available," without warranties of any kind, express or
+					implied. Time zone rules, daylight saving transitions, and city data can and do change, and while
+					we aim for accuracy, we don't guarantee that every calculation, offset, or city listing is
+					error-free or current. You're responsible for confirming important meeting times independently,
+					especially around daylight saving transitions.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Limitation of liability</h2>
+				<p class="mt-3 text-body-lg text-body">
+					To the fullest extent permitted by law, we are not liable for any missed meetings, scheduling
+					errors, or other damages arising from your use of, or inability to use, the Site.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Intellectual property</h2>
+				<p class="mt-3 text-body-lg text-body">
+					The design, code, and branding of the Site belong to their respective owners. Public city and
+					time zone data used by the tools comes from open sources and is used under their respective
+					licenses.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Changes to the Site or these terms</h2>
+				<p class="mt-3 text-body-lg text-body">
+					We may update these terms, or change, suspend, or discontinue any part of the Site, at any time.
+					Continued use of the Site after changes take effect means you accept the updated terms.
+				</p>
+			</div>
+
+			<div>
+				<h2 class="text-heading-md text-ink">Contact</h2>
+				<p class="mt-3 text-body-lg text-body">
+					Questions about these terms can be sent to
+					<a href={`mailto:${contactEmail}`} class="text-link hover:text-link-deep">{contactEmail}</a>, or
+					via our <a href="/contact" class="text-link hover:text-link-deep">Contact page</a>.
+				</p>
+			</div>
+		</div>
+	</section>
+</ToolLayout>

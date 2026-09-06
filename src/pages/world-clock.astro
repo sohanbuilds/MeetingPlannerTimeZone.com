@@ -1,0 +1,23 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import { WorldClock } from '../islands/WorldClock';
+---
+
+<ToolLayout
+	title="World Clock Meeting Planner — Current Local Time in Any City"
+	description="A world clock meeting planner that shows the current local time in multiple cities at once, updated live, with day/night at a glance — built for planning across time zones."
+>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-4xl">
+			<p class="text-mono-eyebrow uppercase text-mute">World clock</p>
+			<h1 class="mt-2 text-display-xl text-ink">What time is it around the world?</h1>
+			<p class="mt-4 max-w-2xl text-body-lg text-body">
+				Add any city to see its current local time, updated live, alongside everyone else's.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-6xl px-6 pb-24 pt-16">
+		<WorldClock client:only="preact" />
+	</section>
+</ToolLayout>

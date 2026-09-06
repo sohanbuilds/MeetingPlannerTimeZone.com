@@ -1,0 +1,122 @@
+---
+import { DateTime } from 'luxon';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import { TwoCityCalculator } from '../../islands/TwoCityCalculator';
+import { allCities, getCityById, pairSlug } from '../../lib/cities/lookup';
+import { buildUtcGridForAnchorDay } from '../../lib/time/convert';
+import { evaluateInstant } from '../../lib/time/overlap';
+import { DEFAULT_SLIDER_BOUNDS, DEFAULT_WEEKEND_DAYS, DEFAULT_WORK_HOURS } from '../../lib/time/types';
+import type { Participant } from '../../lib/time/types';
+
+export function getStaticPaths() {
+	const cities = allCities();
+	const paths: { params: { pair: string }; props: { fromId: string; toId: string } }[] = [];
+	for (const from of cities) {
+		for (const to of cities) {
+			if (from.id === to.id) continue;
+			paths.push({ params: { pair: pairSlug(from.id, to.id) }, props: { fromId: from.id, toId: to.id } });
+		}
+	}
+	return paths;
+}
+
+const { fromId, toId } = Astro.props;
+const fromCity = getCityById(fromId)!;
+const toCity = getCityById(toId)!;
+
+function formatOffsetDiff(minutes: number): string {
+	const abs = Math.abs(minutes);
+	const h = Math.floor(abs / 60);
+	const m = abs % 60;
+	return m === 0 ? `${h} hour${h === 1 ? '' : 's'}` : `${h}h ${m}m`;
+}
+
+const now = DateTime.now();
+const fromNow = now.setZone(fromCity.tz);
+const toNow = now.setZone(toCity.tz);
+const diffMinutes = toNow.offset - fromNow.offset;
+// Sentence reads "{fromCity} is {relation} {toCity}", so a positive diff (toCity's offset is
+// larger, i.e. toCity is ahead) means fromCity is BEHIND toCity — not "ahead of" as the raw sign suggests.
+const relation = diffMinutes > 0 ? 'behind' : diffMinutes < 0 ? 'ahead of' : 'in sync with';
+const diffLabel = formatOffsetDiff(diffMinutes);
+
+const workParticipants: Participant[] = [
+	{ id: 'from', cityId: fromCity.id, mode: 'work', workHours: { ...DEFAULT_WORK_HOURS, weekendDays: DEFAULT_WEEKEND_DAYS } },
+	{ id: 'to', cityId: toCity.id, mode: 'work', workHours: { ...DEFAULT_WORK_HOURS, weekendDays: DEFAULT_WEEKEND_DAYS } },
+];
+// This page is statically generated once at build time, so the evergreen summary below must not
+// depend on which literal day the build happened to run on (a build on a Saturday would otherwise
+// permanently claim "no overlap today" for every visitor, every day, until the next redeploy).
+// Advance to the next Wednesday in fromCity's local time as a stable, representative weekday.
+let referenceDay = fromNow;
+while (referenceDay.weekday !== 3) {
+	referenceDay = referenceDay.plus({ days: 1 });
+}
+const anchorDateISO = referenceDay.toISODate()!;
+const grid = buildUtcGridForAnchorDay(anchorDateISO, fromCity.tz);
+const chronologicalSlots = grid.map((instant) => evaluateInstant(instant, workParticipants, new Map([[fromCity.id, fromCity], [toCity.id, toCity]]), anchorDateISO, DEFAULT_SLIDER_BOUNDS));
+
+const excellentSlots = chronologicalSlots.filter((s) => s.tier === 'excellent');
+const goodOrBetter = chronologicalSlots.filter((s) => s.tier !== 'poor');
+const overlapSlots = excellentSlots.length > 0 ? excellentSlots : goodOrBetter;
+const hasOverlap = overlapSlots.length > 0;
+const firstOverlap = overlapSlots[0];
+const lastOverlap = overlapSlots[overlapSlots.length - 1];
+
+function localTimeFor(slot: (typeof chronologicalSlots)[number], participantId: string): string {
+	const info = slot.perParticipant.find((p) => p.participantId === participantId)!;
+	const [h, m] = info.localTime.split(':').map(Number);
+	const period = h < 12 ? 'AM' : 'PM';
+	const h12 = h % 12 === 0 ? 12 : h % 12;
+	return `${h12}:${m.toString().padStart(2, '0')} ${period}`;
+}
+
+const title = `${fromCity.name} to ${toCity.name} Meeting Time — Best Time to Call`;
+const description = `${fromCity.name} is ${diffLabel} ${relation} ${toCity.name}. See today's best overlap between working hours and get an exact meeting time in seconds.`;
+---
+
+<ToolLayout title={title} description={description}>
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-3xl">
+			<p class="text-mono-eyebrow uppercase text-mute">City pair</p>
+			<h1 class="mt-2 text-display-xl text-ink">
+				{fromCity.name} to {toCity.name} meeting time
+			</h1>
+			<p class="mt-4 text-body-lg text-body">
+				{fromCity.name}, {fromCity.country} is currently {diffLabel} {relation} {toCity.name}, {toCity.country}.
+				{
+					hasOverlap ? (
+						<>
+							{' '}Based on typical 9 AM–6 PM working hours, the best window to meet on a typical weekday runs from{' '}
+							<strong>{localTimeFor(firstOverlap, 'from')}</strong> to <strong>{localTimeFor(lastOverlap, 'from')}</strong> in{' '}
+							{fromCity.name} — that's <strong>{localTimeFor(firstOverlap, 'to')}</strong> to{' '}
+							<strong>{localTimeFor(lastOverlap, 'to')}</strong> in {toCity.name}.
+						</>
+					) : (
+						<> With typical working hours on both sides, there's no comfortable overlap on a typical weekday — someone will need to take an early or late call.</>
+					)
+				}
+				 Offsets can shift by about an hour around daylight saving transitions in either city — the calculator below always uses the current, correct offset for any date you pick.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-4xl px-6 pb-24 pt-16">
+		<TwoCityCalculator client:only="preact" initialFromCityId={fromCity.id} initialToCityId={toCity.id} />
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24">
+		<h2 class="text-heading-lg text-ink">About meetings between {fromCity.name} and {toCity.name}</h2>
+		<p class="mt-4 text-body-md text-body">
+			{fromCity.name} runs on {fromCity.tz.replace('_', ' ')} time, while {toCity.name} runs on{' '}
+			{toCity.tz.replace('_', ' ')} time. Use the calculator above to set each person's own working or waking
+			hours, switch to Personal mode for a broader range of comfortable call times, and share the exact time
+			you land on with a single link.
+		</p>
+		<p class="mt-3">
+			<a href={`/meeting-time/${pairSlug(toCity.id, fromCity.id)}`} class="text-body-md text-link hover:text-link-deep">
+				See the {toCity.name} to {fromCity.name} view →
+			</a>
+		</p>
+	</section>
+</ToolLayout>

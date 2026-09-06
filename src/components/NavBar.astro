@@ -1,0 +1,63 @@
+---
+import Logo from './Logo.astro';
+
+const links = [
+	{ href: '/meeting-time-calculator', label: 'Two-City Calculator' },
+	{ href: '/timezone-converter', label: 'Timezone Converter' },
+	{ href: '/world-clock', label: 'World Clock' },
+	{ href: '/meeting-time', label: 'City Pairs' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<header class="relative border-b border-hairline bg-canvas">
+	<nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3">
+		<a
+			href="/"
+			class={`flex items-center gap-2 text-label-sm tracking-tight ${currentPath === '/' ? 'font-semibold text-ink' : 'font-semibold text-body hover:text-ink'}`}
+		>
+			<Logo class="w-6" />
+			MeetingPlannerTimeZone
+		</a>
+		<div class="hidden items-center gap-2 md:flex">
+			{
+				links.map((link) => (
+					<a
+						href={link.href}
+						class={`rounded-full px-3 py-2 text-body-md transition-colors ${
+							currentPath === link.href ? 'text-ink font-medium' : 'text-body hover:text-ink'
+						}`}
+					>
+						{link.label}
+					</a>
+				))
+			}
+		</div>
+		<details class="md:hidden">
+			<summary
+				class="flex cursor-pointer list-none items-center rounded-sm border border-hairline px-3 py-2 text-button-md text-ink transition-colors hover:border-mute [&::-webkit-details-marker]:hidden"
+				aria-label="Open menu"
+			>
+				Menu
+			</summary>
+			<div class="absolute inset-x-0 top-full z-20 border-b border-hairline bg-canvas-elevated shadow-[0_2px_2px_rgba(0,0,0,0.04),0_8px_16px_-4px_rgba(0,0,0,0.08)]">
+				<ul class="flex flex-col px-6 py-3">
+					{
+						links.map((link) => (
+							<li>
+								<a
+									href={link.href}
+									class={`block rounded-sm px-3 py-2 text-body-md ${
+										currentPath === link.href ? 'text-ink font-medium' : 'text-body'
+									}`}
+								>
+									{link.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</details>
+	</nav>
+</header>

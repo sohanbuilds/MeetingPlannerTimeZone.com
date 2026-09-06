@@ -1,0 +1,70 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import { TwoCityCalculator } from '../islands/TwoCityCalculator';
+
+const title = 'Meeting Planner Time Zone Calculator — Best Time to Call Someone Abroad';
+const description =
+	"A time and date meeting planner for two cities — pick both and instantly see the best time to call or meet, ranked by Comfort Score so it's convenient for both sides.";
+
+const faqs = [
+	{
+		q: "What's the best time to call someone in a different time zone?",
+		a: 'The best time is one that falls inside both people’s comfortable hours — not just "technically daytime" for both. Set each person’s mode to Work or Personal above, and every candidate hour gets a Comfort Score (Excellent, Good, or Poor) so you can see at a glance which times are genuinely convenient rather than merely possible.',
+	},
+	{
+		q: 'How is this different from a plain time zone converter?',
+		a: 'A converter just shows you what time it is elsewhere. This calculator ranks every hour of the day for both participants at once, factoring in each person’s work or waking hours, weekends, and your own acceptable-hours slider — then surfaces the times worth actually proposing.',
+	},
+	{
+		q: 'Can I share the result with the other person?',
+		a: 'Yes — the "Copy shareable link" button encodes your two cities, chosen date, and settings directly into the URL, so whoever you send it to sees the exact same calculation instantly, with no sign-up and no manually re-entering anything.',
+	},
+];
+const faqJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.q,
+		acceptedAnswer: { '@type': 'Answer', text: faq.a },
+	})),
+};
+---
+
+<ToolLayout title={title} description={description}>
+	<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} is:inline />
+	<section class="hero-mesh border-b border-hairline bg-canvas px-6 py-16">
+		<div class="mx-auto max-w-3xl">
+			<p class="text-mono-eyebrow uppercase text-mute">Two-city calculator</p>
+			<h1 class="mt-2 text-display-xl text-ink">Best time to call, meeting time calculator</h1>
+			<p class="mt-4 text-body-lg text-body">
+				Wondering what's the best time to call someone in another city — or just need the overlap between two
+				working days? Pick two cities below and we'll rank every hour of the day by how comfortable it is for
+				both people, not just whether it technically overlaps.
+			</p>
+		</div>
+	</section>
+
+	<section class="mx-auto max-w-4xl px-6 pb-16 pt-16">
+		<TwoCityCalculator client:only="preact" />
+	</section>
+
+	<section class="mx-auto max-w-3xl px-6 pb-24">
+		<h2 class="text-heading-lg text-ink">Frequently asked questions</h2>
+		<div class="mt-6 flex flex-col gap-4">
+			{
+				faqs.map((faq) => (
+					<details class="card group">
+						<summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-heading-md text-ink [&::-webkit-details-marker]:hidden">
+							{faq.q}
+							<span class="shrink-0 text-mute transition-transform duration-150 group-open:rotate-180" aria-hidden="true">
+								▾
+							</span>
+						</summary>
+						<p class="mt-3 text-body-md text-body">{faq.a}</p>
+					</details>
+				))
+			}
+		</div>
+	</section>
+</ToolLayout>
