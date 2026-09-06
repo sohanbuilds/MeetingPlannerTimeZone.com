@@ -115,6 +115,18 @@ const siteName = 'MeetingPlannerTimeZone';
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImageURL} />
+
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q070GTPNKB" is:inline></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				window.dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-Q070GTPNKB');
+		</script>
 	</head>
 	<body class="min-h-screen bg-canvas font-sans text-ink antialiased">
 		<slot />
